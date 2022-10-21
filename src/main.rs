@@ -1,3 +1,5 @@
+mod disc_district;
+
 fn main() {
-    println!("Hello, world!");
+    disc_district::solve();
 }
