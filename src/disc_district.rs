@@ -1,31 +1,47 @@
-pub fn solve() {
-    let (x, y) = find_closest_district(1);
-    println!("{} {}", x, y);
+struct Point {
+    x: i64,
+    y: i64,
 }
 
-fn find_closest_district(radius: u64) -> (u64, u64) {
-    let mut closest_point = (0, 0);
-    let mut closest_distance: f64 = (radius + 1000) as f64;
+pub fn solve() {
+    let point = find_closest_district(1);
+    println!("{} {}", point.x, point.y);
+}
+
+fn find_closest_district(radius: i64) -> Point {
+    let mut closest_point = Point {
+        x: 0,
+        y: radius + 1000,
+    };
+    let mut closest_distance = distance(&closest_point);
     for x in 0..=radius {
-        let  y = closest_y_outside(radius, x);
-        let distance = distance(x, y);
-        println!("x: {x}, y: {y}, distance: {distance}");
+        let point = closest_point_outside(radius, x);
+        let distance = distance(&point);
         if distance < closest_distance {
-            closest_point = (x, y);
+            closest_point = point;
             closest_distance = distance;
         }
     }
     closest_point
 }
 
-fn closest_y_outside(radius: u64, x: u64) -> u64 {
-    let mut  y = ((radius * radius - x * x) as f64).sqrt() as u64;
-    if distance(x, y) <= radius as f64 {
+fn closest_point_outside(radius: i64, x: i64) -> Point {
+    let x_square = x * x;
+    let r_square = radius * radius;
+    let mut y = ((r_square - x_square) as f64).sqrt() as i64;
+    if distance_cords(x, y) <= radius as f64 {
         y += 1;
     }
-    y
+    Point {
+        x,
+        y
+    }
 }
 
-fn distance(x: u64, y: u64) -> f64 {
+fn distance_cords(x: i64, y: i64) -> f64 {
     ((x * x + y * y) as f64).sqrt()
+}
+
+fn distance(point: &Point) -> f64 {
+    distance_cords(point.x, point.y)
 }
